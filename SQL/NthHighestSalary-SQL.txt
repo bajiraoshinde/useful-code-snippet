@@ -1,0 +1,30 @@
+
+-- Highest 2nd Salary Using SubQuery and RowNumber
+Select Max(Salary) from TESTEMP
+where Salary < (Select Max(Salary) from TESTEMP);
+--**************************************************************
+-- Highest Nth Salary Using SubQuery and RowNumber
+declare @nth int=3;
+Select * from (
+Select ROW_NUMBER() Over( Order by salary desc) as RowNum,Salary from 
+(Select distinct Salary from TESTEMP) aa) bb where RowNum = @nth;
+--**************************************************************
+
+-- Highest Nth Salary Using SubQuery and Dense Rank
+declare @nth1 int=4;
+Select * from (
+Select Dense_Rank() Over( Order by salary desc) as RowNum,Salary from 
+TestEMP) bb where RowNum = @nth1;
+--**************************************************************
+
+-- Highest Nth Salary Using CTE
+with ordered_salary as
+(
+SELECT EmpName, salary, Dense_Rank() OVER(ORDER BY salary DESC) rn
+FROM TESTEMP
+)
+select EmpName, salary
+from ordered_salary
+where rn = 2;
+
+--**************************************************************
