@@ -1,0 +1,14 @@
+
+--- All N-level Sub Categories  of given category
+WITH RecursiveCateCTE AS
+(
+    
+	Select CatName, ID from TESTCategory where ParentCatId = 3
+    UNION ALL
+   
+    SELECT c.CatName,c.ID
+    FROM TESTCategory C
+    JOIN RecursiveCateCTE r ON c.ParentCatId = r.ID
+)
+--Show the records stored inside  the CTE we created above
+SELECT * FROM RecursiveCateCTE;
